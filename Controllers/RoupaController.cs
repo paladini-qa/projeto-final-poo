@@ -41,7 +41,7 @@ namespace ModaOrientadaAObjetos.Controllers
             CadastrarRoupa();
             break;
           case 2:
-            ListarRoupas();
+            GerenciarRoupas();
             break;
           case 3:
             AdicionarRoupaAoCarrinho();
@@ -81,10 +81,131 @@ namespace ModaOrientadaAObjetos.Controllers
       view.AguardarTecla();
     }
 
+    public void GerenciarRoupas()
+    {
+      int opcao;
+      do
+      {
+        view.ExibirMenuGerenciarRoupas();
+        string entrada = Console.ReadLine();
+
+        if (!int.TryParse(entrada, out opcao))
+        {
+          view.ExibirMensagem("Opcao invalida! Digite apenas numeros.");
+          view.AguardarTecla();
+          continue;
+        }
+
+        switch (opcao)
+        {
+          case 1:
+            ListarRoupas();
+            break;
+          case 2:
+            ExcluirRoupa();
+            break;
+          case 3:
+            EditarRoupa();
+            break;
+          case 0:
+            // Voltar ao menu principal
+            break;
+          default:
+            view.ExibirMensagem("Opcao invalida! Digite um numero de 0 a 3.");
+            view.AguardarTecla();
+            break;
+        }
+      } while (opcao != 0);
+    }
+
     public void ListarRoupas()
     {
       var roupas = roupaRepository.GetAll();
       view.ListarTodasAsRoupas(roupas);
+      view.AguardarTecla();
+    }
+
+    public void ExcluirRoupa()
+    {
+      var roupas = roupaRepository.GetAll();
+      if (roupas.Count == 0)
+      {
+        view.ExibirMensagem("Nenhuma roupa cadastrada para excluir!");
+        view.AguardarTecla();
+        return;
+      }
+
+      view.ListarTodasAsRoupas(roupas);
+
+      try
+      {
+        int id = view.SolicitarIdRoupaParaExcluir();
+        Roupa roupaSelecionada = roupaRepository.GetById(id);
+
+        if (roupaSelecionada != null)
+        {
+          if (view.ConfirmarExclusao(roupaSelecionada))
+          {
+            roupaRepository.Delete(id);
+            view.ExibirMensagem("Roupa excluida com sucesso!");
+          }
+          else
+          {
+            view.ExibirMensagem("Exclusao cancelada.");
+          }
+        }
+        else
+        {
+          view.ExibirMensagem("Roupa nao encontrada. Verifique o ID digitado.");
+        }
+      }
+      catch (Exception)
+      {
+        view.ExibirMensagem("Erro ao excluir roupa. Tente novamente.");
+      }
+      view.AguardarTecla();
+    }
+
+    public void EditarRoupa()
+    {
+      var roupas = roupaRepository.GetAll();
+      if (roupas.Count == 0)
+      {
+        view.ExibirMensagem("Nenhuma roupa cadastrada para editar!");
+        view.AguardarTecla();
+        return;
+      }
+
+      view.ListarTodasAsRoupas(roupas);
+
+      try
+      {
+        int id = view.SolicitarIdRoupaParaEditar();
+        Roupa roupaSelecionada = roupaRepository.GetById(id);
+
+        if (roupaSelecionada != null)
+        {
+          Roupa roupaEditada = view.SolicitarDadosParaEdicao(roupaSelecionada);
+          
+          if (view.ConfirmarEdicao(roupaSelecionada, roupaEditada))
+          {
+            roupaRepository.Update(roupaEditada);
+            view.ExibirMensagem("Roupa editada com sucesso!");
+          }
+          else
+          {
+            view.ExibirMensagem("Edicao cancelada.");
+          }
+        }
+        else
+        {
+          view.ExibirMensagem("Roupa nao encontrada. Verifique o ID digitado.");
+        }
+      }
+      catch (Exception)
+      {
+        view.ExibirMensagem("Erro ao editar roupa. Tente novamente.");
+      }
       view.AguardarTecla();
     }
 

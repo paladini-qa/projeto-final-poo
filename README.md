@@ -1,5 +1,7 @@
 # Moda Orientada a Objetos
 
+Alunos: **Emilly Pessutti**, **Vitor Paladini**
+
 Este projeto foi desenvolvido como trabalho final da disciplina de Programação Orientada a Objetos. O sistema simula um gerenciamento de loja de roupas de grife unissex, implementando os principais conceitos de POO e seguindo rigorosamente o padrão de arquitetura MVC (Model-View-Controller).
 
 ## Funcionalidades
@@ -65,11 +67,6 @@ O projeto está organizado seguindo o padrão MVC:
 - O sistema automaticamente cria um banco de dados SQLite (`loja.db`) na primeira execução
 - Todos os dados (roupas, carrinho e histórico de pedidos) são persistidos automaticamente
 - O histórico de pedidos fica disponível mesmo após reiniciar a aplicação
-
-## Alunos
-
-- **Vitor Paladini**
-- **Emilly Pessutti**
 
 ## Objetivo Acadêmico
 
